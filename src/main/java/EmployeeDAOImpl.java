@@ -4,6 +4,7 @@ import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
+
     @Override
     public void create(Employee employee, Connection connection) {
 
@@ -14,7 +15,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             statement.setString(2, employee.getLastName());
             statement.setString(3, employee.getGender());
             statement.setInt(4, employee.getAge());
-            statement.setInt(5, employee.getCityId());
+            statement.setInt(5, employee.getCity().getCityId());
 
             statement.executeUpdate();
 
@@ -30,7 +31,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Employee employee = new Employee();
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM employee WHERE id=(?)")) {
+                "SELECT * FROM employee INNER JOIN city ON employee.city_id=city.city_id AND id=(?)")) {
 
             statement.setInt(1, id);
 
@@ -43,7 +44,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 employee.setLastName(resultSet.getString(3));
                 employee.setGender(resultSet.getString(4));
                 employee.setAge(resultSet.getInt(5));
-                employee.setCityId(resultSet.getInt(6));
+                //employee.setCityId(resultSet.getInt(6));
+                employee.setCity(new City(resultSet.getString("city_name")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,7 +59,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         List<Employee> employeeList = new ArrayList<>();
 
         try(PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM employee")) {
+                "SELECT * FROM employee INNER JOIN city ON employee.city_id=city.city_id")) {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -67,9 +69,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 String lastName = resultSet.getString(3);
                 String gender = resultSet.getString(4);
                 int age = resultSet.getInt(5);
-                int cityId = resultSet.getInt(6);
+                City city = new City(resultSet.getString("city_name"));
 
-                employeeList.add(new Employee(id, firstName, lastName, gender, age, cityId));
+                employeeList.add(new Employee(id, firstName, lastName, gender, age, city));
             }
         } catch (SQLException e) {
             e.printStackTrace();

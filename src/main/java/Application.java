@@ -1,14 +1,20 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Application {
-    public static void main(String[] args) throws SQLException {
-        final String user = "postgres";
-        final String password = "GG11you21free";
-        final String url = "jdbc:postgresql://localhost:5432/skypro";
+    public static void main(String[] args) throws SQLException, IOException {
+        Properties properties = new Properties();
+        properties.load(Files.newInputStream(Paths.get("db.properties").toFile().toPath()));
 
-        try (final Connection connection = DriverManager.getConnection(url, user, password);
+        try (final Connection connection = DriverManager.getConnection(
+                properties.getProperty("url"),
+                properties.getProperty("user"),
+                properties.getProperty("password"));
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM employee WHERE id = (?)")) {
 
             statement.setInt(1, 3);
@@ -33,14 +39,7 @@ public class Application {
             System.out.println();
             EmployeeDAO employeeDAO = new EmployeeDAOImpl();
             System.out.println("Получение конкретного объекта Employee по id:");
-            System.out.println(employeeDAO.readById(5,connection));
-
-            System.out.println();
-            System.out.println("Получение списка всех объектов Employee из базы:");
-            List<Employee> employeeList = new ArrayList<>(employeeDAO.readAll(connection));
-            for (Employee employee : employeeList) {
-                System.out.println(employee);
-            }
+            System.out.println(employeeDAO.readById(5, connection));
 
             /*System.out.println("Изменение конкретного объекта Employee в базе по id:");
             employeeDAO.updateById(2,"Ульяна","Серова","Ж",40,2, connection);*/
@@ -50,6 +49,13 @@ public class Application {
 
             /*System.out.println("Удаление конкретного объекта Employee из базы по id:");
             employeeDAO.deleteById(10,connection);*/
+
+            System.out.println();
+            System.out.println("Получение списка всех объектов Employee из базы:");
+            List<Employee> employeeList = new ArrayList<>(employeeDAO.readAll(connection));
+            for (Employee employee : employeeList) {
+                System.out.println(employee);
+            }
         }
     }
 }

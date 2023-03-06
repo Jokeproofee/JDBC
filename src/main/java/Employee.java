@@ -7,74 +7,74 @@ public class Employee {
     private String lastName;
     private String gender;
     private int age;
-    private int cityId;
+    private City city;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, String gender, int age, int cityId) {
+    public Employee(String firstName, String lastName, String gender, int age, City city) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.cityId = cityId;
+        this.city = city;
     }
 
-    public Employee(int id, String firstName, String lastName, String gender, int age, int cityId) {
+    public Employee(int id, String firstName, String lastName, String gender, int age, City city) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.cityId = cityId;
+        this.city = city;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getGender() {
         return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public int getAge() {
         return age;
     }
 
+    public City getCity() {
+        return city;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public void setAge(int age) {
         this.age = age;
     }
 
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override
@@ -82,12 +82,12 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id && age == employee.age && cityId == employee.cityId && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender);
+        return id == employee.id && age == employee.age && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender) && Objects.equals(city, employee.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, gender, age, cityId);
+        return Objects.hash(id, firstName, lastName, gender, age, city);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Employee {
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
-                ", cityId=" + cityId +
+                ", " + city +
                 '}';
     }
 }
